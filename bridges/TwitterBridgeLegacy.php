@@ -22,10 +22,10 @@ class TwitterBridgeLegacy extends BridgeAbstract{
 			$this->returnError('You must specify a keyword (?q=...) or a Twitter username (?u=...).', 400);
 		}
 
-		foreach($html->find('div.tweet') as $tweet) {
+		foreach($html->find('div.js-stream-tweet') as $tweet) {
 			$item = new \Item();
 			// extract username and sanitize
-			$item->username = trim(substr($tweet->find('span.username', 0)->plaintext, 1));	
+			$item->username = $tweet->getAttribute('data-screen-name');
 			// extract fullname (pseudonym)
 			$item->fullname = $tweet->getAttribute('data-name'); 
 			// get avatar link
@@ -33,11 +33,11 @@ class TwitterBridgeLegacy extends BridgeAbstract{
 			// get TweetID
 			$item->id = $tweet->getAttribute('data-tweet-id');
 			// get tweet link	
-			$item->uri = 'https://twitter.com'.$tweet->find('a.details', 0)->getAttribute('href');	
+			$item->uri = 'https://twitter.com'.$tweet->find('a.js-permalink', 0)->getAttribute('href');	
 			// extract tweet timestamp
-			$item->timestamp = $tweet->find('span._timestamp', 0)->getAttribute('data-time');
+			$item->timestamp = $tweet->find('span.js-short-timestamp', 0)->getAttribute('data-time');
 			// extract plaintext	
-			$item->content_simple = str_replace('href="/', 'href="https://twitter.com/', html_entity_decode(strip_tags($tweet->find('p.tweet-text', 0)->innertext, '<a>'))); 
+			$item->content_simple = str_replace('href="/', 'href="https://twitter.com/', html_entity_decode(strip_tags($tweet->find('p.js-tweet-text', 0)->innertext, '<a>'))); 
 	
 			// processing content links
 			foreach($tweet->find('a') as $link) {
