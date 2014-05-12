@@ -26,7 +26,7 @@ class TwitterBridge extends BridgeAbstract{
             $this->returnError('You must specify a keyword (?q=...) or a Twitter username (?u=...).', 400);
         }
 
-        foreach($html->find('div.tweet') as $tweet) {
+        foreach($html->find('div.js-stream-tweet') as $tweet) {
             $item = new \Item();
             $item->username = $tweet->getAttribute('data-screen-name');	// extract username and sanitize
             $item->fullname = $tweet->getAttribute('data-name'); // extract fullname (pseudonym)
