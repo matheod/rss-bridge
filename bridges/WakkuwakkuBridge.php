@@ -28,9 +28,9 @@ class WakkuWakkuBridge extends BridgeAbstract{
             $item = new \Item();
             $item->uri = 'http://wakku.to/post/show/'.$json['id'];
             $item->postid = $json['id'];
-            $item->timestamp = $json['created_at'];
-            $item->imageUri = $json['file_url'];
-            $item->thumbnailUri = $json['preview_url'];
+            $item->timestamp = strtodate($json['created_at']);
+            $item->imageUri = 'http://wakku.to/'.$json['file_url'];
+            $item->thumbnailUri = 'http://wakku.to/'.$json['preview_url'];
             $item->title = 'WakkuWakku | '.$json['id'];
             $item->content = '<a href="' . $item->imageUri . '"><img src="' . $item->thumbnailUri . '" /></a><br>Tags: '.$json['tags']; 
             if(isset($json['id']) and !empty($json['id'])) $this->items[] = $item;
