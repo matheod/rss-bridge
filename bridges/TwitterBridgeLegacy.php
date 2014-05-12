@@ -16,7 +16,7 @@ class TwitterBridgeLegacy extends BridgeAbstract{
 			$html = file_get_html('http://twitter.com/search/realtime?q='.urlencode($param['q']).'+include:retweets&src=typd') or $this->returnError('No results for this query.', 404);
 		}
 		elseif (isset($param['u'])) {   /* user timeline mode */
-			$html = file_get_html('http://twitter.com/'.urlencode($param['u'])) or $this->returnError('Requested username can\'t be found.', 404);
+			$html = file_get_html('http://twitter.com/'.urlencode($param['u']).'/with_replies') or $this->returnError('Requested username can\'t be found.', 404);
 		}
 		else {
 			$this->returnError('You must specify a keyword (?q=...) or a Twitter username (?u=...).', 400);
