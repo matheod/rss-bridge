@@ -8,6 +8,10 @@
 * @use1(u="username")
 * @use2(p="playlist id")
 * @use3(s="search keyword",pa="page")
+* 
+* WARNING: to parse big playlists (over ~90 videos), you need to edit simple_html_dom.php: 
+* change: define('MAX_FILE_SIZE', 600000);
+* into:   define('MAX_FILE_SIZE', 900000);  (or more)
 */
 class YoutubeBridge extends BridgeAbstract{
     
