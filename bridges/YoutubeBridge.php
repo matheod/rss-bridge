@@ -36,15 +36,15 @@ class YoutubeBridge extends BridgeAbstract{
             $this->request = $param['p'];
             $html = file_get_html('https://www.youtube.com/playlist?list='.urlencode($this->request).'') or $this->returnError('Could not request Youtube.', 404);
 
-        	foreach($html->find('li.playlist-video-item') as $element) {
+        	foreach($html->find('tr.pl-video') as $element) {
            	 $item = new \Item();
-           	 $item->uri = 'https://www.youtube.com'.$element->find('a',0)->href;
-            	$item->thumbnailUri = 'https:'.$element->find('img',0)->src;
-            	$item->title = trim($element->find('h3',0)->plaintext);
+           	 $item->uri = 'https://www.youtube.com'.$element->find('.pl-video-title a',0)->href;
+            	$item->thumbnailUri = 'https:'.str_replace('/default.','/mqdefault.',$element->find('.pl-video-thumbnail img',0)->src);
+            	$item->title = trim($element->find('.pl-video-title a',0)->plaintext);
             	$item->content = '<a href="' . $item->uri . '"><img src="' . $item->thumbnailUri . '" /></a><br><a href="' . $item->uri . '">' . $item->title . '</a>';
             	$this->items[] = $item;
         	}
-		$this->request = 'Playlist '.str_replace(' - YouTube', '', $html->find('title', 0)->plaintext).', by '.$html->find('h1', 0)->plaintext;
+		$this->request = 'Playlist '.trim(str_replace(' - YouTube', '', $html->find('title', 0)->plaintext)).', by '.$html->find('h1', 0)->plaintext;
         }
         else if (isset($param['s'])) {   /* search mode */
             $this->request = $param['s']; $page = 1; if (isset($param['pa'])) $page = (int)preg_replace("/[^0-9]/",'', $param['pa']); 
